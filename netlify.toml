@@ -1,0 +1,8 @@
+[build]
+  command = "npm run build"
+  functions = "netlify/functions"
+  publish = "dist"
+
+[env]
+  [env.production]
+    VITE_ANTHROPIC_API_KEY = "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"
