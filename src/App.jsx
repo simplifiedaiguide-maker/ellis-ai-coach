@@ -26,17 +26,18 @@ const MOCK_RESPONSES = {
 };
 
 export default function App() {
-  const [page, setPage] = useState('home'); // home, interview, results
+  const [page, setPage] = useState('home');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [responses, setResponses] = useState({});
   const [userResponse, setUserResponse] = useState('');
+  const [downloading, setDownloading] = useState(false);
 
   const handleNext = () => {
     setResponses({
       ...responses,
       [currentQuestion]: userResponse
     });
-    
+
     if (currentQuestion < 4) {
       setCurrentQuestion(currentQuestion + 1);
       setUserResponse('');
@@ -45,39 +46,39 @@ export default function App() {
     }
   };
 
-  const downloadCareerProfile = () => {
-    const pdf = new jsPDF();
-    pdf.setFontSize(16);
-    pdf.text('Career Profile', 10, 10);
-    pdf.setFontSize(11);
-    
+  const downloadAllPDFs = async () => {
+    setDownloading(true);
+
+    const pdf1 = new jsPDF();
+    pdf1.setFontSize(16);
+    pdf1.text('Career Profile', 10, 10);
+    pdf1.setFontSize(11);
+
     let y = 20;
     Object.keys(responses).forEach((qIndex) => {
       const q = MOCK_RESPONSES[qIndex].question;
       const r = responses[qIndex] || '(No response)';
-      
-      pdf.setFontSize(10);
-      pdf.text(`Q${parseInt(qIndex) + 1}: ${q}`, 10, y, { maxWidth: 190 });
+
+      pdf1.setFontSize(10);
+      pdf1.text(`Q${parseInt(qIndex) + 1}: ${q}`, 10, y, { maxWidth: 190 });
       y += 15;
-      
-      pdf.setFontSize(9);
-      pdf.text(`Your answer: ${r}`, 10, y, { maxWidth: 185 });
+
+      pdf1.setFontSize(9);
+      pdf1.text(`Your answer: ${r}`, 10, y, { maxWidth: 185 });
       y += 20;
     });
-    
-    pdf.save('Career-Profile.pdf');
-  };
 
-  const downloadATSResume = () => {
-    const pdf = new jsPDF();
-    pdf.setFontSize(14);
-    pdf.text('ATS-Optimized Resume Summary', 10, 10);
-    pdf.setFontSize(10);
-    
-    let y = 20;
-    pdf.text('Key Strengths from Interview:', 10, y);
+    pdf1.save('01-Career-Profile.pdf');
+
+    const pdf2 = new jsPDF();
+    pdf2.setFontSize(14);
+    pdf2.text('ATS-Optimized Resume Summary', 10, 10);
+    pdf2.setFontSize(10);
+
+    y = 20;
+    pdf2.text('Key Strengths from Interview:', 10, y);
     y += 8;
-    
+
     const strengths = [
       '✓ 20+ years of progressive experience in SaaS and customer-facing roles',
       '✓ Proven ability to translate complex domain expertise into business value',
@@ -85,21 +86,38 @@ export default function App() {
       '✓ Strong communication and problem-solving across technical and non-technical teams',
       '✓ Track record of process improvement and cost optimization'
     ];
-    
+
     strengths.forEach(s => {
-      pdf.text(s, 10, y, { maxWidth: 190 });
+      pdf2.text(s, 10, y, { maxWidth: 190 });
       y += 8;
     });
-    
-    pdf.save('ATS-Resume-Summary.pdf');
-  };
 
-  const downloadCoverLetter = () => {
-    const pdf = new jsPDF();
-    pdf.setFontSize(12);
-    pdf.text('Cover Letter', 10, 10);
-    pdf.setFontSize(10);
-    
+    pdf2.addPage();
+    pdf2.setFontSize(12);
+    pdf2.text('Interview Insights', 10, 10);
+    pdf2.setFontSize(9);
+    y = 20;
+
+    Object.keys(responses).forEach((qIndex) => {
+      const q = MOCK_RESPONSES[qIndex].question;
+      const r = responses[qIndex] || '(No response)';
+
+      pdf2.text(`${q}`, 10, y, { maxWidth: 190 });
+      y += 10;
+
+      pdf2.setFontSize(8);
+      pdf2.text(`${r}`, 10, y, { maxWidth: 185 });
+      y += 10;
+      pdf2.setFontSize(9);
+    });
+
+    pdf2.save('02-ATS-Resume-Summary.pdf');
+
+    const pdf3 = new jsPDF();
+    pdf3.setFontSize(12);
+    pdf3.text('Cover Letter', 10, 10);
+    pdf3.setFontSize(10);
+
     const letter = `Dear Hiring Manager,
 
 With over 20 years of experience in customer-focused operations and SaaS strategy, I've learned that sustainable success comes from understanding people, not just processes. My career has been built on translating complex challenges into clear solutions—a skill that directly transfers to any role where human-centered thinking drives outcomes.
@@ -115,19 +133,19 @@ I'm not looking for a job; I'm looking for a place where experience is valued, c
 Sincerely,
 E.M. Brown`;
 
-    pdf.setFontSize(10);
-    pdf.text(letter, 10, 25, { maxWidth: 190 });
-    pdf.save('Cover-Letter.pdf');
+    pdf3.text(letter, 10, 25, { maxWidth: 190 });
+    pdf3.save('03-Cover-Letter.pdf');
+
+    setDownloading(false);
   };
 
-  // HOME PAGE
   if (page === 'home') {
     return (
       <div style={styles.container}>
         <header style={styles.header}>
-          <img 
-            src="/Ellis_HeadShot.png" 
-            alt="Ellis" 
+          <img
+            src="/Ellis_HeadShot.png"
+            alt="Ellis"
             style={styles.avatar}
             onError={(e) => {
               e.target.style.display = 'none';
@@ -139,5 +157,267 @@ E.M. Brown`;
         </header>
 
         <div style={styles.homeContent}>
-          <p style={styles.homeText}>
-            Career transitions don't have to be stressful. Let's talk about how your decades of experience translate i
+          <p style={styles.homeText}>Career transitions don't have to be stressful. Let's talk about how your decades of experience translate into modern opportunities.</p>
+
+          <button onClick={() => setPage('interview')} style={styles.btnPrimary}>
+            Start Mock Interview →
+          </button>
+
+          <p style={styles.tagline}>Work wisely. Live softly.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (page === 'interview') {
+    const question = MOCK_RESPONSES[currentQuestion];
+    const progress = ((currentQuestion + 1) / 5) * 100;
+
+    return (
+      <div style={styles.container}>
+        <header style={styles.header}>
+          <button onClick={() => setPage('home')} style={styles.backBtn}>
+            ← Back
+          </button>
+          <h1 style={styles.title}>Interview with Ellis</h1>
+        </header>
+
+        <div style={styles.interviewContent}>
+          <div style={styles.progressBar}>
+            <div style={{ ...styles.progressFill, width: `${progress}%` }}></div>
+          </div>
+          <p style={styles.progressText}>Question {currentQuestion + 1} of 5</p>
+
+          <div style={styles.questionCard}>
+            <p style={styles.question}>{question.question}</p>
+          </div>
+
+          <textarea
+            value={userResponse}
+            onChange={(e) => setUserResponse(e.target.value)}
+            placeholder="Share your thoughts here..."
+            style={styles.textarea}
+          />
+
+          <button
+            onClick={handleNext}
+            disabled={!userResponse.trim()}
+            style={{
+              ...styles.btnPrimary,
+              opacity: userResponse.trim() ? 1 : 0.5,
+              cursor: userResponse.trim() ? 'pointer' : 'not-allowed'
+            }}
+          >
+            {currentQuestion === 4 ? 'Complete Interview' : 'Next Question →'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (page === 'results') {
+    return (
+      <div style={styles.container}>
+        <header style={styles.header}>
+          <h1 style={styles.title}>Your Career Profile</h1>
+        </header>
+
+        <div style={styles.resultsContent}>
+          <p style={styles.congratulations}>Great work. Here's what we learned about your career strengths.</p>
+
+          <button
+            onClick={downloadAllPDFs}
+            disabled={downloading}
+            style={{
+              ...styles.downloadAllBtn,
+              opacity: downloading ? 0.7 : 1,
+              cursor: downloading ? 'not-allowed' : 'pointer'
+            }}
+          >
+            {downloading ? 'Generating PDFs...' : '⬇️ Download All 3 PDFs'}
+          </button>
+
+          <p style={styles.downloadNote}>(Career Profile, ATS Resume, Cover Letter)</p>
+
+          <button
+            onClick={() => {
+              setPage('home');
+              setCurrentQuestion(0);
+              setResponses({});
+              setUserResponse('');
+            }}
+            style={styles.btnSecondary}
+          >
+            Start Over
+          </button>
+
+          <p style={styles.tagline}>Work wisely. Live softly.</p>
+        </div>
+      </div>
+    );
+  }
+}
+
+const styles = {
+  container: {
+    minHeight: '100vh',
+    backgroundColor: '#faf8f6',
+    fontFamily: "'Inter', sans-serif",
+    color: '#2c2416'
+  },
+  header: {
+    backgroundColor: '#6b4423',
+    color: '#faf8f6',
+    padding: '2rem 1rem',
+    textAlign: 'center',
+    borderBottom: '3px solid #d4a574'
+  },
+  avatar: {
+    width: '80px',
+    height: '80px',
+    borderRadius: '50%',
+    border: '4px solid #d4a574',
+    marginBottom: '1rem',
+    objectFit: 'cover'
+  },
+  title: {
+    margin: '0.5rem 0',
+    fontSize: '2rem',
+    fontWeight: '700'
+  },
+  subtitle: {
+    margin: '0.25rem 0 0 0',
+    fontSize: '1rem',
+    opacity: 0.9
+  },
+  homeContent: {
+    maxWidth: '600px',
+    margin: '3rem auto',
+    padding: '2rem',
+    textAlign: 'center'
+  },
+  homeText: {
+    fontSize: '1.1rem',
+    lineHeight: '1.6',
+    marginBottom: '2rem',
+    color: '#4a3f38'
+  },
+  interviewContent: {
+    maxWidth: '700px',
+    margin: '2rem auto',
+    padding: '2rem'
+  },
+  progressBar: {
+    width: '100%',
+    height: '6px',
+    backgroundColor: '#e8dfd6',
+    borderRadius: '3px',
+    overflow: 'hidden',
+    marginBottom: '1rem'
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#6b4423',
+    transition: 'width 0.3s ease'
+  },
+  progressText: {
+    fontSize: '0.9rem',
+    color: '#8b7355',
+    marginBottom: '1.5rem'
+  },
+  questionCard: {
+    backgroundColor: '#ffffff',
+    padding: '1.5rem',
+    borderLeft: '4px solid #6b4423',
+    marginBottom: '1.5rem',
+    borderRadius: '4px'
+  },
+  question: {
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    lineHeight: '1.5',
+    margin: 0,
+    color: '#2c2416'
+  },
+  textarea: {
+    width: '100%',
+    minHeight: '150px',
+    padding: '1rem',
+    fontSize: '1rem',
+    border: '1px solid #d4a574',
+    borderRadius: '4px',
+    fontFamily: 'inherit',
+    marginBottom: '1.5rem',
+    boxSizing: 'border-box',
+    color: '#2c2416'
+  },
+  resultsContent: {
+    maxWidth: '700px',
+    margin: '2rem auto',
+    padding: '2rem',
+    textAlign: 'center'
+  },
+  congratulations: {
+    fontSize: '1.1rem',
+    lineHeight: '1.6',
+    marginBottom: '2rem',
+    color: '#4a3f38'
+  },
+  downloadAllBtn: {
+    padding: '1.2rem 2rem',
+    fontSize: '1.1rem',
+    fontWeight: '700',
+    backgroundColor: '#6b4423',
+    color: '#faf8f6',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s',
+    marginBottom: '0.5rem'
+  },
+  downloadNote: {
+    fontSize: '0.9rem',
+    color: '#8b7355',
+    marginBottom: '1.5rem',
+    fontStyle: 'italic'
+  },
+  btnPrimary: {
+    padding: '1rem 2rem',
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    backgroundColor: '#6b4423',
+    color: '#faf8f6',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s',
+    display: 'inline-block'
+  },
+  btnSecondary: {
+    padding: '0.75rem 1.5rem',
+    fontSize: '1rem',
+    fontWeight: '600',
+    backgroundColor: '#d4a574',
+    color: '#2c2416',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s'
+  },
+  tagline: {
+    marginTop: '2rem',
+    fontSize: '0.9rem',
+    color: '#8b7355',
+    fontStyle: 'italic'
+  },
+  backBtn: {
+    padding: '0.5rem 1rem',
+    fontSize: '1rem',
+    backgroundColor: 'rgba(250, 248, 246, 0.2)',
+    color: '#faf8f6',
+    border: '1px solid rgba(250, 248, 246, 0.3)',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    marginBottom: '1rem'
+  }
+};
