@@ -49,80 +49,152 @@ export default function App() {
   const downloadAllPDFs = async () => {
     setDownloading(true);
 
+    // PDF 1: CAREER PROFILE
     const pdf1 = new jsPDF();
-    pdf1.setFontSize(16);
-    pdf1.text('Career Profile', 10, 10);
-    pdf1.setFontSize(11);
+    pdf1.setFont('Helvetica');
 
-    let y = 20;
-    Object.keys(responses).forEach((qIndex) => {
+    // Header
+    pdf1.setFillColor(107, 68, 35); // #6b4423
+    pdf1.rect(0, 0, 210, 30, 'F');
+    pdf1.setFontSize(24);
+    pdf1.setTextColor(250, 248, 246); // cream
+    pdf1.text('Career Profile', 15, 22);
+
+    // Reset for body
+    pdf1.setTextColor(44, 36, 22); // dark brown
+    let y = 45;
+
+    Object.keys(responses).forEach((qIndex, idx) => {
       const q = MOCK_RESPONSES[qIndex].question;
       const r = responses[qIndex] || '(No response)';
 
-      pdf1.setFontSize(10);
-      pdf1.text(`Q${parseInt(qIndex) + 1}: ${q}`, 10, y, { maxWidth: 190 });
-      y += 15;
+      // Question number & title
+      pdf1.setFontSize(11);
+      pdf1.setFont('Helvetica', 'bold');
+      pdf1.text(`Q${parseInt(qIndex) + 1}: ${q}`, 15, y, { maxWidth: 180 });
+      y += pdf1.getTextDimensions(`Q${parseInt(qIndex) + 1}: ${q}`, { maxWidth: 180 }).h + 4;
 
-      pdf1.setFontSize(9);
-      pdf1.text(`Your answer: ${r}`, 10, y, { maxWidth: 185 });
-      y += 20;
+      // Answer
+      pdf1.setFontSize(10);
+      pdf1.setFont('Helvetica', 'normal');
+      pdf1.setTextColor(74, 63, 56); // medium brown
+      pdf1.text(`${r}`, 15, y, { maxWidth: 180 });
+      y += pdf1.getTextDimensions(`${r}`, { maxWidth: 180 }).h + 12;
+
+      // Page break if needed
+      if (y > 260 && idx < Object.keys(responses).length - 1) {
+        pdf1.addPage();
+        y = 20;
+      }
     });
+
+    // Footer
+    pdf1.setFontSize(8);
+    pdf1.setTextColor(139, 115, 85);
+    pdf1.text('Work wisely. Live softly.', 15, 285);
 
     pdf1.save('01-Career-Profile.pdf');
 
+    // PDF 2: ATS RESUME SUMMARY
     const pdf2 = new jsPDF();
-    pdf2.setFontSize(14);
-    pdf2.text('ATS-Optimized Resume Summary', 10, 10);
-    pdf2.setFontSize(10);
+    pdf2.setFont('Helvetica');
 
-    y = 20;
-    pdf2.text('Key Strengths from Interview:', 10, y);
+    // Header
+    pdf2.setFillColor(107, 68, 35);
+    pdf2.rect(0, 0, 210, 30, 'F');
+    pdf2.setFontSize(24);
+    pdf2.setTextColor(250, 248, 246);
+    pdf2.text('ATS Resume Summary', 15, 22);
+
+    // Key Strengths Section
+    pdf2.setTextColor(44, 36, 22);
+    y = 45;
+    pdf2.setFontSize(12);
+    pdf2.setFont('Helvetica', 'bold');
+    pdf2.text('Key Strengths from Interview:', 15, y);
     y += 8;
 
     const strengths = [
-      '✓ 20+ years of progressive experience in SaaS and customer-facing roles',
-      '✓ Proven ability to translate complex domain expertise into business value',
-      '✓ Expert in AI integration, automation, and digital transformation',
-      '✓ Strong communication and problem-solving across technical and non-technical teams',
-      '✓ Track record of process improvement and cost optimization'
+      '20+ years of progressive experience in SaaS and customer-facing roles',
+      'Proven ability to translate complex domain expertise into business value',
+      'Expert in AI integration, automation, and digital transformation',
+      'Strong communication and problem-solving across technical and non-technical teams',
+      'Track record of process improvement and cost optimization'
     ];
 
+    pdf2.setFontSize(10);
+    pdf2.setFont('Helvetica', 'normal');
     strengths.forEach(s => {
-      pdf2.text(s, 10, y, { maxWidth: 190 });
-      y += 8;
+      pdf2.setTextColor(107, 68, 35);
+      pdf2.text('✓', 15, y);
+      pdf2.setTextColor(74, 63, 56);
+      pdf2.text(s, 22, y, { maxWidth: 173 });
+      y += pdf2.getTextDimensions(s, { maxWidth: 173 }).h + 6;
     });
 
-    pdf2.addPage();
+    // Interview Insights Section
+    y += 8;
     pdf2.setFontSize(12);
-    pdf2.text('Interview Insights', 10, 10);
+    pdf2.setFont('Helvetica', 'bold');
+    pdf2.setTextColor(44, 36, 22);
+    pdf2.text('Interview Insights:', 15, y);
+    y += 8;
+
     pdf2.setFontSize(9);
-    y = 20;
+    pdf2.setFont('Helvetica', 'normal');
 
     Object.keys(responses).forEach((qIndex) => {
       const q = MOCK_RESPONSES[qIndex].question;
       const r = responses[qIndex] || '(No response)';
 
-      pdf2.text(`${q}`, 10, y, { maxWidth: 190 });
-      y += 10;
+      pdf2.setFont('Helvetica', 'bold');
+      pdf2.setTextColor(107, 68, 35);
+      pdf2.text(`Q${parseInt(qIndex) + 1}:`, 15, y);
+      y += 4;
 
-      pdf2.setFontSize(8);
-      pdf2.text(`${r}`, 10, y, { maxWidth: 185 });
-      y += 10;
-      pdf2.setFontSize(9);
+      pdf2.setFont('Helvetica', 'normal');
+      pdf2.setTextColor(74, 63, 56);
+      pdf2.text(q, 15, y, { maxWidth: 180 });
+      y += pdf2.getTextDimensions(q, { maxWidth: 180 }).h + 3;
+
+      pdf2.text(`Answer: ${r}`, 15, y, { maxWidth: 180 });
+      y += pdf2.getTextDimensions(`Answer: ${r}`, { maxWidth: 180 }).h + 6;
+
+      if (y > 260) {
+        pdf2.addPage();
+        y = 20;
+      }
     });
+
+    // Footer
+    pdf2.setFontSize(8);
+    pdf2.setTextColor(139, 115, 85);
+    pdf2.text('Work wisely. Live softly.', 15, 285);
 
     pdf2.save('02-ATS-Resume-Summary.pdf');
 
+    // PDF 3: COVER LETTER
     const pdf3 = new jsPDF();
-    pdf3.setFontSize(12);
-    pdf3.text('Cover Letter', 10, 10);
-    pdf3.setFontSize(10);
+    pdf3.setFont('Helvetica');
 
-    const letter = `Dear Hiring Manager,
+    // Header
+    pdf3.setFillColor(107, 68, 35);
+    pdf3.rect(0, 0, 210, 30, 'F');
+    pdf3.setFontSize(24);
+    pdf3.setTextColor(250, 248, 246);
+    pdf3.text('Cover Letter', 15, 22);
+
+    // Body
+    pdf3.setTextColor(44, 36, 22);
+    pdf3.setFontSize(11);
+    pdf3.setFont('Helvetica', 'normal');
+
+    const letterText = `Dear Hiring Manager,
 
 With over 20 years of experience in customer-focused operations and SaaS strategy, I've learned that sustainable success comes from understanding people, not just processes. My career has been built on translating complex challenges into clear solutions—a skill that directly transfers to any role where human-centered thinking drives outcomes.
 
 Throughout my tenure in support operations and career coaching, I've consistently demonstrated the ability to:
+
 - Diagnose root causes with precision and empathy
 - Build systems that scale without sacrificing quality
 - Mentor teams to think strategically, not reactively
@@ -133,7 +205,13 @@ I'm not looking for a job; I'm looking for a place where experience is valued, c
 Sincerely,
 E.M. Brown`;
 
-    pdf3.text(letter, 10, 25, { maxWidth: 190 });
+    pdf3.text(letterText, 15, 45, { maxWidth: 180 });
+
+    // Footer
+    pdf3.setFontSize(8);
+    pdf3.setTextColor(139, 115, 85);
+    pdf3.text('Work wisely. Live softly.', 15, 285);
+
     pdf3.save('03-Cover-Letter.pdf');
 
     setDownloading(false);
