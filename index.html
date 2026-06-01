@@ -9,13 +9,20 @@
   <body>
     <!-- MailerLite Script -->
     <script>
-      (function(w,d,e,u,f,l,n){
-        w[f]=w[f]||function(){(w[f].q=w[f].q||[])
-          .push(arguments)},l=d.createElement(e),l.async=1,l.src=u,
-          n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n)
-        })(window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-      ml('account', '2188320');
-    </script>
+  (function(w,d,e,u,f,l,n){
+    w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+      .push(arguments)},l=d.createElement(e),l.async=1,l.src=u,
+      n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n)
+    })(window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+  ml('account', '2188320');
+  
+  // Give MailerLite time to initialize
+  setTimeout(function() {
+    if (window.ml) {
+      console.log('MailerLite loaded');
+    }
+  }, 500);
+</script>
 
     <!-- Email Gatekeeper Section -->
     <section style="background: linear-gradient(135deg, #3d2817 0%, #2d1810 100%); padding: 60px 20px; text-align: center; border-bottom: 3px solid #c9a96e;">
