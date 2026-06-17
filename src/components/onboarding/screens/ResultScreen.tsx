@@ -5,6 +5,7 @@ import { subscribeToMailerLite } from '../../../utils/mailerlite';
 import { Button } from '../shared/Button';
 import { TextInput } from '../shared/TextInput';
 import { ProgressBar } from '../shared/ProgressBar';
+import { CopyButton } from '../shared/CopyButton';
 import './ResultScreen.css';
 
 interface ResultScreenProps {
@@ -16,6 +17,7 @@ interface ResultContent {
   title: string;
   subtitle: string;
   resultText: React.ReactNode;
+  copyText?: string;
 }
 
 function yearsPhrase(raw: string): string {
@@ -24,18 +26,20 @@ function yearsPhrase(raw: string): string {
 }
 
 function getMockInterviewContent(
+  name: string,
   currentRole: string,
   targetRole: string,
   blocker: BlockerType | null,
 ): ResultContent {
+  const hi = name ? `${name}, r` : `R`;
   const questionsByBlocker: Record<BlockerType, { question: string; why: string }> = {
     'overqualified-age-bias': {
       question: `"What excites you most about stepping into a ${targetRole} role at this stage of your career?"`,
-      why: `This disarms the "why would you want this?" assumption. Your answer reframes experience as intentional, not a fallback — and signals energy, not desperation.`,
+      why: `This disarms the "why would you want this?" assumption. ${hi}eframe your experience as intentional, not a fallback — and signal energy, not desperation.`,
     },
     'interview-nerves': {
       question: `"Tell me about a time you had to make a high-stakes decision without all the information you needed."`,
-      why: `This plays to your strength. ${currentRole} experience means you've done this dozens of times. Record a 2-minute answer and listen back — you'll hear yourself get more confident as you tell the real story.`,
+      why: `This plays to your strength. ${currentRole} experience means you've done this dozens of times. ${hi}ecord a 2-minute answer and listen back — you'll hear yourself get more confident as you tell the real story.`,
     },
     'ats-filtering': {
       question: `"Walk me through how you've adapted your approach as your industry changed over the years."`,
@@ -43,20 +47,22 @@ function getMockInterviewContent(
     },
     'positioning-unclear': {
       question: `"If you had to describe the thread that runs through your whole career in one sentence, what would it be?"`,
-      why: `For career pivots or scattered backgrounds, this is the question that unlocks your story. Practise it until the answer feels obvious — because once it does, every other interview question gets easier.`,
+      why: `For career pivots or scattered backgrounds, this is the question that unlocks your story. ${hi}ractise it until the answer feels obvious — because once it does, every other interview question gets easier.`,
     },
   };
 
   const fallback = {
     question: `"Walk me through a time you had to learn something completely new on the job. How did you approach it?"`,
-    why: `This addresses the 'can you still learn?' concern that comes up with experienced professionals. Your answer proves you're curious, not stuck.`,
+    why: `This addresses the 'can you still learn?' concern that comes up with experienced professionals. ${hi}eframe this as proof you're curious, not stuck.`,
   };
 
   const { question, why } = (blocker && questionsByBlocker[blocker]) || fallback;
+  const copyText = `${name ? `${name} — ` : ''}Practice question for your ${targetRole} interviews:\n\n${question}\n\n${why}`;
 
   return {
     title: "Here's your practice question.",
     subtitle: `Tailored for ${currentRole} → ${targetRole}:`,
+    copyText,
     resultText: (
       <>
         <p>
@@ -72,34 +78,36 @@ function getMockInterviewContent(
 }
 
 function getResumeContent(
+  name: string,
   currentRole: string,
   targetRole: string,
   rawYears: string,
   blocker: BlockerType | null,
 ): ResultContent {
   const yrs = yearsPhrase(rawYears);
+  const namePrefix = name ? `${name} is a` : `A`;
 
   const afterByBlocker: Record<BlockerType, { after: string; explanation: string }> = {
     'ats-filtering': {
-      after: `${currentRole} with ${yrs} of experience. Skilled in [insert 2–3 keywords directly from the job posting]. Proven track record of [specific outcome] — now targeting ${targetRole} roles where that same focus drives results.`,
+      after: `${namePrefix} ${currentRole} with ${yrs} of experience. Skilled in [insert 2–3 keywords directly from the job posting]. Proven track record of [specific outcome] — now targeting ${targetRole} roles where that same focus drives results.`,
       explanation: `ATS ranks resumes by keyword density. The brackets are intentional — swap them for exact phrases from each job ad you apply to. One tailored summary beats ten generic ones.`,
     },
     'overqualified-age-bias': {
-      after: `${currentRole} transitioning into ${targetRole}. ${yrs} of experience building the judgment, relationships, and systems that matter most in this role — without the learning curve. Here to contribute, not coast.`,
+      after: `${namePrefix} ${currentRole} transitioning into ${targetRole}. ${yrs} of experience building the judgment, relationships, and systems that matter most in this role — without the learning curve. Here to contribute, not coast.`,
       explanation: `"Overqualified" is fear of attitude, not skills. This copy pre-empts it. You're not settling — you're choosing. That reframe has to be in the first two lines or it won't land.`,
     },
     'interview-nerves': {
-      after: `${currentRole} with ${yrs} of experience delivering results under pressure. Known for staying clear-headed when stakes are high and teams need direction. Now bringing that steadiness to ${targetRole}.`,
+      after: `${namePrefix} ${currentRole} with ${yrs} of experience delivering results under pressure. Known for staying clear-headed when stakes are high and teams need direction. Now bringing that steadiness to ${targetRole}.`,
       explanation: `Nerves in interviews often come from underselling on paper first. This summary signals composure before you walk in the door — which sets a different tone for the whole conversation.`,
     },
     'positioning-unclear': {
-      after: `${currentRole} with ${yrs} of experience across [2–3 industries or functions]. The common thread: [your one-line superpower]. Now channelling that into ${targetRole} — where it's needed most.`,
+      after: `${namePrefix} ${currentRole} with ${yrs} of experience across [2–3 industries or functions]. The common thread: [your one-line superpower]. Now channelling that into ${targetRole} — where it's needed most.`,
       explanation: `A scattered background looks like indecision until you name the pattern. Fill in the brackets honestly. The sentence that connects your dots is the most valuable line on your resume.`,
     },
   };
 
   const fallback = {
-    after: `${currentRole} with ${yrs} of experience driving results in complex environments. Known for turning ambiguity into clear action — and following through. Now bringing that capability to ${targetRole}.`,
+    after: `${namePrefix} ${currentRole} with ${yrs} of experience driving results in complex environments. Known for turning ambiguity into clear action — and following through. Now bringing that capability to ${targetRole}.`,
     explanation: `The "before" leads with your title and tenure. The "after" leads with what you do and the result. Age markers are gone. You sound like judgment, not years on a clock.`,
   };
 
@@ -109,6 +117,7 @@ function getResumeContent(
   return {
     title: "Here's your resume summary rewrite.",
     subtitle: `Targeted for ${targetRole}:`,
+    copyText: `${name ? `${name}'s resume summary\n\n` : ''}Before (what most people write):\n"${before}"\n\nAfter (paste this at the top of your resume):\n"${after}"\n\n${explanation}`,
     resultText: (
       <>
         <p><strong>Before (what most people write):</strong></p>
@@ -122,6 +131,7 @@ function getResumeContent(
 }
 
 function getLinkedInContent(
+  name: string,
   currentRole: string,
   targetRole: string,
   rawYears: string,
@@ -154,14 +164,16 @@ function getLinkedInContent(
   };
 
   const { headline, tip } = (blocker && headlinesByBlocker[blocker]) || fallback;
+  const before = `${currentRole} at [Company]`;
 
   return {
     title: "Here's your LinkedIn headline rewrite.",
     subtitle: `For your profile:`,
+    copyText: `${name ? `${name}'s LinkedIn headline\n\n` : ''}Before (what yours probably says):\n"${before}"\n\nAfter (paste this as your headline):\n"${headline}"\n\n${tip}`,
     resultText: (
       <>
         <p><strong>Before (what yours probably says):</strong></p>
-        <p className="before-example">"{currentRole} at [Company]"</p>
+        <p className="before-example">"{before}"</p>
         <p><strong>After (paste this as your headline):</strong></p>
         <p className="after-example">"{headline}"</p>
         <p className="explanation">{tip}</p>
@@ -171,6 +183,7 @@ function getLinkedInContent(
 }
 
 function getStrategyContent(
+  name: string,
   currentRole: string,
   targetRole: string,
   blocker: BlockerType | null,
@@ -225,10 +238,12 @@ function getStrategyContent(
   };
 
   const { focus, steps } = (blocker && stepsByBlocker[blocker]) || fallback;
+  const stepLines = steps.map((s, i) => `${i + 1}. ${s}`).join('\n');
 
   return {
     title: "Here's your 30-day plan.",
     subtitle: `From ${currentRole} to ${targetRole}:`,
+    copyText: `${name ? `${name}'s 30-day plan\n\n` : ''}${focus}\n\n${stepLines}`,
     resultText: (
       <>
         <p><strong>{focus}</strong></p>
@@ -244,13 +259,13 @@ function getStrategyContent(
 
 function getResultContent(sessionData: SessionData): ResultContent {
   const { path, snapshot, blocker } = sessionData;
-  const { currentRole, targetRole, yearsOfExperience } = snapshot;
+  const { name, currentRole, targetRole, yearsOfExperience } = snapshot;
 
   const contentByPath: Record<SessionPath, () => ResultContent> = {
-    'mock-interview': () => getMockInterviewContent(currentRole, targetRole, blocker),
-    'resume': () => getResumeContent(currentRole, targetRole, yearsOfExperience, blocker),
-    'linkedin': () => getLinkedInContent(currentRole, targetRole, yearsOfExperience, blocker),
-    'strategy': () => getStrategyContent(currentRole, targetRole, blocker),
+    'mock-interview': () => getMockInterviewContent(name, currentRole, targetRole, blocker),
+    'resume': () => getResumeContent(name, currentRole, targetRole, yearsOfExperience, blocker),
+    'linkedin': () => getLinkedInContent(name, currentRole, targetRole, yearsOfExperience, blocker),
+    'strategy': () => getStrategyContent(name, currentRole, targetRole, blocker),
   };
 
   return path
@@ -295,7 +310,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
     setError(null);
     setIsLoading(true);
     try {
-      await subscribeToMailerLite({ email: email.trim(), name: '', sessionData });
+      await subscribeToMailerLite({ email: email.trim(), name: sessionData.snapshot.name, sessionData });
       setSuccess(true);
       setTimeout(() => onContinue(), 2000);
     } catch (err) {
@@ -314,6 +329,11 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
         <p className="subtext">{content.subtitle}</p>
 
         <div className="result-box">
+          {content.copyText && (
+            <div className="result-box-actions">
+              <CopyButton text={content.copyText} />
+            </div>
+          )}
           {content.resultText}
         </div>
 

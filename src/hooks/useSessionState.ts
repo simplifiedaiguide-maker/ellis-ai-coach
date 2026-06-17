@@ -7,6 +7,7 @@ export const useSessionState = () => {
     sessionData: {
       path: null,
       snapshot: {
+        name: '',
         currentRole: '',
         targetRole: '',
         yearsOfExperience: '',

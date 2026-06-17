@@ -7,6 +7,7 @@ export type BlockerType =
   | 'positioning-unclear';
 
 export interface UserSnapshot {
+  name: string;
   currentRole: string;
   targetRole: string;
   yearsOfExperience: string;
