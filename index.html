@@ -4,75 +4,11 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>career-coach</title>
+    <title>Ellis AI Coach</title>
+    <meta name="description" content="Ellis helps professionals 50+ translate decades of experience into their next career chapter." />
   </head>
   <body>
-    <!-- Email Gatekeeper Section -->
-    <section style="background: linear-gradient(135deg, #3d2817 0%, #2d1810 100%); padding: 60px 20px; text-align: center; border-bottom: 3px solid #c9a96e;">
-      <div style="max-width: 600px; margin: 0 auto;">
-        <h1 style="font-size: 32px; color: #f5f1ed; margin: 0 0 16px 0; font-family: Georgia, serif; font-weight: 400; letter-spacing: 0.5px;">
-          Your AI Mock Interview
-        </h1>
-        <p style="font-size: 18px; color: #e8dcc8; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 300;">
-          Translate 20+ years into your next chapter.
-        </p>
-        <p style="font-size: 14px; color: #d4cfc4; margin: 0 0 32px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6;">
-          Ellis gives you real-time feedback on your career pivot—no credit card, no sales call. Just you and your AI coach.
-        </p>
-        
-        <!-- MailerLite Form (HTML Embed) -->
-        <div id="mlb2-42000505" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-42000505">
-          <div class="ml-form-align-center">
-            <div class="ml-form-embedWrapper embedForm">
-              <div class="ml-form-embedBody ml-form-embedBodyHorizontal row-form">
-                <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2188320/forms/188547349059995198/subscribe" data-code="" method="post" target="_blank">
-                  <div class="ml-form-formContent horozintalForm">
-                    <div class="ml-form-horizontalRow">
-                      <div class="ml-input-horizontal">
-                        <div style="width: 100%;" class="horizontal-fields">
-                          <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
-                            <input type="email" class="form-control" name="fields[email]" placeholder="Email" autocomplete="email" style="background-color: #ffffff; color: #333333; border-color: #cccccc; border-radius: 4px; border-style: solid; border-width: 1px; font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-size: 14px; padding: 10px 10px; width: 100%; box-sizing: border-box;">
-                          </div>
-                        </div>
-                      </div>
-                      <div class="ml-button-horizontal primary">
-                        <button type="submit" class="primary" style="background-color: #6B4423; border: none; border-radius: 4px; color: #ffffff; cursor: pointer; font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 700; padding: 10px 20px; width: auto;">Get Started</button>
-                      </div>
-                    </div>
-                  </div>
-                  <input type="hidden" name="ml-submit" value="1">
-                  <input type="hidden" name="anticsrf" value="true">
-                </form>
-              </div>
-              <div class="ml-form-successBody row-success" style="display: none">
-                <div class="ml-form-successContent">
-                  <h4>Thank you!</h4>
-                  <p>You're in. Check your inbox for next steps.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /MailerLite Form -->
-        
-        <p style="font-size: 12px; color: #c9a96e; margin-top: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-          ✦ We respect your inbox. Work wisely. Live softly.
-        </p>
-      </div>
-    </section>
-
-    <!-- React App -->
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    
-    <!-- MailerLite Form Script -->
-    <script src="https://groot.mailerlite.com/js/w/webforms.min.js?vb397d78ebaa8a0f631d35384c46d781b" type="text/javascript"></script>
-    <script>
-      function ml_webform_success_42000505() {
-        var $ = ml_jQuery || jQuery;
-        $('.ml-subscribe-form-42000505 .row-success').show();
-        $('.ml-subscribe-form-42000505 .row-form').hide();
-      }
-    </script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

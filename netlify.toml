@@ -2,3 +2,12 @@
   command = "npm run build"
   functions = "netlify/functions"
   publish = "dist"
+
+[dev]
+  framework = "#auto"
+  command = "npm run dev"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

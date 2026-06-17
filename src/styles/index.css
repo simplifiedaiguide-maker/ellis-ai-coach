@@ -1,0 +1,18 @@
+@import './variables.css';
+@import './typography.css';
+@import './interactive.css';
+@import './layout.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Satoshi', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
