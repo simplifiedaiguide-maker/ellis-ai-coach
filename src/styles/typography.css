@@ -1,0 +1,58 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=zodiak@400,700&display=swap');
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Zodiak', serif;
+  line-height: 1.1;
+  margin: 0 0 12px 0;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-weight: 700;
+}
+
+p {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+  max-width: 72ch;
+  color: var(--ink);
+}
+
+p.muted {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+small {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 8px;
+}
+
+button, a.btn {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: none;
+}

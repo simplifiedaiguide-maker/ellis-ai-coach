@@ -1,0 +1,36 @@
+.welcome-screen {
+  text-align: center;
+}
+
+.welcome-screen .tag {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 18px;
+}
+
+.welcome-screen h1 {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.welcome-screen .subheading {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 72ch;
+  margin: 0 auto 24px;
+}
+
+.welcome-screen .reassurance {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: 12px;
+}

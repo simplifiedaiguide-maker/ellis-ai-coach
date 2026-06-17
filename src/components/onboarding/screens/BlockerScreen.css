@@ -1,0 +1,16 @@
+.screen h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  margin-bottom: 12px;
+}
+
+.screen .subtext {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.choices {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

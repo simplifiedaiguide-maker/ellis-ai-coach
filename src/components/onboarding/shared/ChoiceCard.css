@@ -1,0 +1,43 @@
+.choice-card {
+  display: block;
+  width: 100%;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  background: white;
+  cursor: pointer;
+  transition: all 200ms ease;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.choice-card strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.choice-card .description {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.choice-card:hover {
+  border-color: var(--primary);
+  background: rgba(1, 105, 111, 0.03);
+}
+
+.choice-card.active {
+  border-color: var(--primary);
+  background: rgba(1, 105, 111, 0.05);
+  box-shadow: 0 0 0 4px rgba(1, 105, 111, 0.1);
+}
+
+.choice-card:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}

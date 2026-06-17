@@ -1,0 +1,18 @@
+a {
+  color: var(--primary);
+  text-decoration: underline;
+  transition: color 200ms ease;
+}
+
+a:hover {
+  color: var(--primary-light);
+}
+
+a:visited {
+  color: #663d4a;
+}
+
+a:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
