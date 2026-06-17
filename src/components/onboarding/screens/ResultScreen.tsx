@@ -89,8 +89,8 @@ function getResumeContent(
 
   const afterByBlocker: Record<BlockerType, { after: string; explanation: string }> = {
     'ats-filtering': {
-      after: `${namePrefix} ${currentRole} with ${yrs} of experience. Skilled in [insert 2–3 keywords directly from the job posting]. Proven track record of [specific outcome] — now targeting ${targetRole} roles where that same focus drives results.`,
-      explanation: `ATS ranks resumes by keyword density. The brackets are intentional — swap them for exact phrases from each job ad you apply to. One tailored summary beats ten generic ones.`,
+      after: `${namePrefix} ${currentRole} with ${yrs} of experience delivering consistent results. Known for cutting through complexity and following through — now targeting ${targetRole} roles where that same focus drives outcomes.`,
+      explanation: `This version removes the age markers and leads with what you deliver. To sharpen it further, swap "delivering consistent results" for 1–2 exact phrases from the job posting — ATS ranks by keyword match.`,
     },
     'overqualified-age-bias': {
       after: `${namePrefix} ${currentRole} transitioning into ${targetRole}. ${yrs} of experience building the judgment, relationships, and systems that matter most in this role — without the learning curve. Here to contribute, not coast.`,
@@ -101,8 +101,8 @@ function getResumeContent(
       explanation: `Nerves in interviews often come from underselling on paper first. This summary signals composure before you walk in the door — which sets a different tone for the whole conversation.`,
     },
     'positioning-unclear': {
-      after: `${namePrefix} ${currentRole} with ${yrs} of experience across [2–3 industries or functions]. The common thread: [your one-line superpower]. Now channelling that into ${targetRole} — where it's needed most.`,
-      explanation: `A scattered background looks like indecision until you name the pattern. Fill in the brackets honestly. The sentence that connects your dots is the most valuable line on your resume.`,
+      after: `${namePrefix} ${currentRole} with ${yrs} of experience spanning multiple industries and functions. Behind every role: a consistent ability to make things work where others don't. Now channelling that into ${targetRole} — where it matters most.`,
+      explanation: `A scattered background looks like indecision until you name the pattern. This copy names it for you — edit the middle sentence to reflect your specific thread, and it becomes the most powerful line on your resume.`,
     },
   };
 
@@ -141,8 +141,8 @@ function getLinkedInContent(
 
   const headlinesByBlocker: Record<BlockerType, { headline: string; tip: string }> = {
     'ats-filtering': {
-      headline: `${targetRole} | [Industry keyword] | [Industry keyword] | Open to opportunities`,
-      tip: `LinkedIn's algorithm ranks profiles by keyword match. Your headline is the most indexed field. Use the exact job titles and skills that appear in roles you're applying to — not your current title.`,
+      headline: `${targetRole} | ${currentRole} background | Results-driven | Open to opportunities`,
+      tip: `LinkedIn's algorithm ranks profiles by keyword match. Your headline is the most indexed field. To sharpen this further, swap in 1–2 exact phrases from the job titles you're applying to — the more specific, the better.`,
     },
     'overqualified-age-bias': {
       headline: `${currentRole} → ${targetRole} | ${yrs} of experience, focused on what's next`,
@@ -153,8 +153,8 @@ function getLinkedInContent(
       tip: `Your LinkedIn headline is your cold open. Lead with where you're going, not where you've been. A calm, direct headline sets the tone — you're not anxious about the transition, you're ready for it.`,
     },
     'positioning-unclear': {
-      headline: `[Your core skill] specialist | ${currentRole} → ${targetRole} | ${yrs} of experience`,
-      tip: `The bracket is the most important part. What's the one thing you're known for across every role you've had? That goes first. Once you name it, your whole profile starts to make sense to a stranger.`,
+      headline: `${currentRole} → ${targetRole} | ${yrs} of experience | Making things work where others don't`,
+      tip: `The last phrase is the most important part. What's the one thing you're known for across every role you've had? Replace it with that. Once you name it, your whole profile starts to make sense to a stranger.`,
     },
   };
 
