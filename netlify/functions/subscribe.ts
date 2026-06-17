@@ -1,7 +1,7 @@
 import type { Handler } from '@netlify/functions';
 
 const MAILERLITE_API_KEY = process.env.MAILERLITE_API_KEY;
-const MAILERLITE_API_URL = 'https://api.mailerlite.com/api/v2';
+const MAILERLITE_API_URL = 'https://connect.mailerlite.com/api';
 
 const GROUP_IDS: Record<string, string> = {
   'mock-interview': process.env.MAILERLITE_GROUP_MOCK_INTERVIEW || '',
@@ -55,47 +55,40 @@ const handler: Handler = async (event) => {
     };
   }
 
-  const subscriber = {
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${MAILERLITE_API_KEY}`,
+    'Accept': 'application/json',
+  };
+
+  const groupId = path && GROUP_IDS[path] ? GROUP_IDS[path] : undefined;
+
+  const payload: Record<string, unknown> = {
     email,
-    name: name || '',
     fields: {
+      name: name || '',
       path: path || '',
       current_role: currentRole || '',
       target_role: targetRole || '',
       years_of_experience: yearsOfExperience || '',
       blocker: blocker || '',
     },
+    ...(groupId ? { groups: [groupId] } : {}),
   };
 
   try {
-    // Subscribe to main list
     const response = await fetch(`${MAILERLITE_API_URL}/subscribers`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-MailerLite-ApiKey': MAILERLITE_API_KEY,
-      },
-      body: JSON.stringify(subscriber),
+      headers,
+      body: JSON.stringify(payload),
     });
 
-    if (!response.ok && response.status !== 422) {
+    // 200 = updated existing, 201 = created new — both are success
+    if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      throw new Error((error as { error?: { message?: string } }).error?.message || 'MailerLite API error');
-    }
-
-    // Add to path-specific group if group ID is configured
-    const groupId = path && GROUP_IDS[path];
-    if (groupId) {
-      await fetch(`${MAILERLITE_API_URL}/groups/${groupId}/subscribers`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-MailerLite-ApiKey': MAILERLITE_API_KEY,
-        },
-        body: JSON.stringify({ email }),
-      }).catch((err) => {
-        console.error('Failed to add to group:', err);
-      });
+      const msg = (error as { message?: string }).message || 'MailerLite API error';
+      console.error('MailerLite error:', response.status, msg);
+      throw new Error(msg);
     }
 
     return {
