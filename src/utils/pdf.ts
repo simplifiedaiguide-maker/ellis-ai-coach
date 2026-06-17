@@ -1,4 +1,3 @@
-import jsPDF from 'jspdf';
 import { SessionData } from '../types/session';
 
 const COLORS = {
@@ -15,6 +14,7 @@ export const generatePDF = async (sessionData: SessionData): Promise<void> => {
     return;
   }
 
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
