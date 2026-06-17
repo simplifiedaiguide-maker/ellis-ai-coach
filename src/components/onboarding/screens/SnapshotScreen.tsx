@@ -17,6 +17,7 @@ export const SnapshotScreen: React.FC<SnapshotScreenProps> = ({
   onNext,
 }) => {
   const isComplete =
+    snapshot.name &&
     snapshot.currentRole &&
     snapshot.targetRole &&
     snapshot.yearsOfExperience;
@@ -29,6 +30,12 @@ export const SnapshotScreen: React.FC<SnapshotScreenProps> = ({
           This takes 90 seconds. The more honest you are, the better the advice.
         </p>
         <div className="form-group">
+          <TextInput
+            label="What's your first name?"
+            placeholder="E.g., Sarah"
+            value={snapshot.name}
+            onChange={(value) => onUpdate('name', value)}
+          />
           <TextInput
             label="What's your current role (or most recent)?"
             placeholder="E.g., Senior Account Manager, Freelance Consultant, Recently laid off"
