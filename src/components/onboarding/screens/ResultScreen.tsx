@@ -50,6 +50,10 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
     }
 
     if (path === 'resume') {
+      const years = snapshot.yearsOfExperience.trim();
+      const hasYearsWord = /year/i.test(years);
+      const yearsPhrase = hasYearsWord ? years : `${years} years`;
+
       return {
         title: "Here's your ATS-friendly rewrite.",
         subtitle: `For ${snapshot.targetRole}:`,
@@ -57,18 +61,20 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
           <>
             <p><strong>Before:</strong></p>
             <p className="before-example">
-              "Experienced {snapshot.currentRole} with {snapshot.yearsOfExperience}{' '}
+              "Experienced {snapshot.currentRole} with {yearsPhrase} of experience,
               managing relationships and driving growth."
             </p>
             <p><strong>After (paste this into your resume):</strong></p>
             <p className="after-example">
-              "Led complex client relationships and strategic initiatives across{' '}
-              {snapshot.yearsOfExperience}. Known for translating ambiguous requests
-              into clear action plans. Now bringing that clarity to {snapshot.targetRole}."
+              "{snapshot.currentRole} with {yearsPhrase} of experience driving results
+              across complex, high-stakes environments. Known for turning ambiguous
+              challenges into clear action — and delivering. Now focused on bringing
+              that same clarity to {snapshot.targetRole}."
             </p>
             <p className="explanation">
-              Notice: Numbers replace adjectives. "Solved" replaces "did." Age
-              markers are gone. You sound like judgment, not experience for its own sake.
+              Notice: The "before" leads with your title and time. The "after" leads
+              with what you do and the result. Age markers are gone. You sound like
+              judgment, not tenure.
             </p>
           </>
         ),
