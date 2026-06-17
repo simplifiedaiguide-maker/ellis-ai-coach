@@ -41,6 +41,18 @@
   font-style: italic;
 }
 
+.result-box .strategy-steps {
+  padding-left: 20px;
+  margin: 12px 0 0;
+}
+
+.result-box .strategy-steps li {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
 .follow-up {
   font-size: 15px;
   color: var(--muted);
